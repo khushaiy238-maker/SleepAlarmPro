@@ -1,0 +1,353 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="text-center mb-4">
+        <h1 class="fw-bold">📚 Study Session Active</h1>
+
+        <p class="text-muted">
+            Stay focused and complete your study goal.
+        </p>
+    </div>
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-8">
+
+            <div class="card shadow-lg border-0 rounded-4">
+
+                <div class="card-body p-5 text-center">
+
+                    <h3 class="mb-4">
+                        📖 {{ subject }}
+                    </h3>
+
+                    <p class="lead">
+                        🎯 Goal:
+                        <strong>{{ goal }}</strong>
+                    </p>
+
+                    <!-- CAMERA STATUS -->
+
+                    <div class="alert alert-success mt-4">
+                        📷 <strong>AI Camera Detection Starting...</strong>
+                        <br>
+                        Your camera should open automatically.
+                    </div>
+
+                    <!-- TIMER -->
+
+                    <div class="my-5">
+
+                        <h1
+                            id="timer"
+                            class="display-1 fw-bold text-success"
+                        >
+                            00:00:00
+                        </h1>
+
+                        <p class="text-muted">
+                            Remaining Study Time
+                        </p>
+
+                    </div>
+
+                    <!-- PROGRESS -->
+
+                    <div
+                        class="progress mb-4"
+                        style="height:25px;"
+                    >
+
+                        <div
+                            id="progressBar"
+                            class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                            style="width:100%;"
+                        >
+                            Study in Progress
+                        </div>
+
+                    </div>
+
+                    <!-- FINISH -->
+
+                    <button
+                        type="button"
+                        id="finishButton"
+                        class="btn btn-danger btn-lg px-5"
+                    >
+                        ⏹ Finish Study Session
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Hidden study information -->
+
+<div
+    id="studyData"
+    data-duration="{{ duration }}"
+    style="display:none;"
+></div>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const studyData =
+        document.getElementById("studyData");
+
+    const durationMinutes =
+        Number(studyData.dataset.duration);
+
+    const totalSeconds =
+        durationMinutes * 60;
+
+    let remainingSeconds =
+        totalSeconds;
+
+    let sessionSaved = false;
+
+
+    const timerElement =
+        document.getElementById("timer");
+
+    const progressBar =
+        document.getElementById("progressBar");
+
+    const finishButton =
+        document.getElementById("finishButton");
+
+
+    // ---------------------------------------------
+    // UPDATE TIMER
+    // ---------------------------------------------
+
+    function updateTimer() {
+
+        if (remainingSeconds <= 0) {
+
+            remainingSeconds = 0;
+
+            timerElement.textContent =
+                "00:00:00";
+
+            progressBar.style.width =
+                "0%";
+
+            progressBar.textContent =
+                "Session Completed";
+
+            saveSession();
+
+            return;
+        }
+
+
+        const hours =
+            Math.floor(
+                remainingSeconds / 3600
+            );
+
+
+        const minutes =
+            Math.floor(
+                (remainingSeconds % 3600) / 60
+            );
+
+
+        const seconds =
+            remainingSeconds % 60;
+
+
+        timerElement.textContent =
+            String(hours).padStart(2, "0") +
+            ":" +
+            String(minutes).padStart(2, "0") +
+            ":" +
+            String(seconds).padStart(2, "0");
+
+
+        const percentage =
+            (remainingSeconds / totalSeconds) * 100;
+
+
+        progressBar.style.width =
+            percentage + "%";
+
+
+        remainingSeconds--;
+
+    }
+
+
+    // ---------------------------------------------
+    // SAVE SESSION
+    // ---------------------------------------------
+
+    function saveSession() {
+
+        if (sessionSaved) {
+            return;
+        }
+
+        sessionSaved = true;
+
+
+        const studiedSeconds =
+            totalSeconds - remainingSeconds;
+
+
+        const studiedMinutes =
+            Math.max(
+                1,
+                Math.floor(
+                    studiedSeconds / 60
+                )
+            );
+
+
+        finishButton.disabled = true;
+
+        finishButton.textContent =
+            "Saving Session...";
+
+
+        fetch(
+            "{{ url_for('save_completed_session') }}",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    studied_minutes:
+                        studiedMinutes
+
+                })
+            }
+        )
+
+        .then(function(response) {
+
+            return response.json();
+
+        })
+
+        .then(function(data) {
+
+            if (data.success) {
+
+                window.location.href =
+                    "{{ url_for('dashboard') }}";
+
+            }
+
+            else {
+
+                sessionSaved = false;
+
+                finishButton.disabled = false;
+
+                finishButton.textContent =
+                    "⏹ Finish Study Session";
+
+                alert(
+                    "Could not save study session."
+                );
+
+            }
+
+        })
+
+        .catch(function(error) {
+
+            console.error(
+                "Session save error:",
+                error
+            );
+
+            sessionSaved = false;
+
+            finishButton.disabled = false;
+
+            finishButton.textContent =
+                "⏹ Finish Study Session";
+
+            alert(
+                "Error saving study session."
+            );
+
+        });
+
+    }
+
+
+    // ---------------------------------------------
+    // FINISH BUTTON
+    // ---------------------------------------------
+
+    finishButton.addEventListener(
+        "click",
+        function () {
+
+            if (
+                confirm(
+                    "Are you sure you want to finish the study session?"
+                )
+            ) {
+
+                saveSession();
+
+            }
+
+        }
+    );
+
+
+    // ---------------------------------------------
+    // START TIMER
+    // ---------------------------------------------
+
+    updateTimer();
+
+
+    const timerInterval =
+        setInterval(
+            function () {
+
+                if (remainingSeconds <= 0) {
+
+                    clearInterval(
+                        timerInterval
+                    );
+
+                    return;
+                }
+
+                updateTimer();
+
+            },
+            1000
+        );
+
+});
+
+</script>
+
+{% endblock %}

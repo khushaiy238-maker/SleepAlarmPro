@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Sleep Alarm Pro - AI Assistant</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #f5f0fb;
+            font-family: Arial, sans-serif;
+            color: #35294a;
+        }
+
+        /* ==============================
+           MAIN CONTAINER
+        ============================== */
+
+        .main-container {
+            max-width: 1100px;
+            margin: 35px auto;
+            padding: 0 15px;
+        }
+
+        .chat-card {
+            background: white;
+            border-radius: 22px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(80, 55, 110, 0.15);
+            min-height: 720px;
+            position: relative;
+        }
+
+        /* ==============================
+           HEADER
+        ============================== */
+
+        .chat-header {
+            background: #cbb8e8;
+            padding: 25px;
+            text-align: center;
+            border-bottom: 1px solid #bda8df;
+        }
+
+        .chat-header h1 {
+            margin: 0;
+            font-size: 32px;
+            font-weight: 700;
+            color: #38294d;
+        }
+
+        .chat-header p {
+            margin-top: 8px;
+            margin-bottom: 0;
+            color: #5d4c72;
+        }
+
+        /* ==============================
+           TOP BUTTONS
+        ============================== */
+
+        .top-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 18px;
+            background: #faf8fd;
+            border-bottom: 1px solid #eee5f7;
+        }
+
+        .history-btn,
+        .clear-btn {
+            border: 1px solid #b99add;
+            background: white;
+            color: #684b88;
+            border-radius: 10px;
+            padding: 8px 14px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .history-btn:hover,
+        .clear-btn:hover {
+            background: #eee5fa;
+        }
+
+        /* ==============================
+           CHAT BOX
+        ============================== */
+
+        .chat-box {
+            height: 470px;
+            overflow-y: auto;
+            padding: 25px;
+            background: #ffffff;
+            scroll-behavior: smooth;
+        }
+
+        .message {
+            display: flex;
+            margin-bottom: 18px;
+        }
+
+        .message-content {
+            padding: 13px 17px;
+            border-radius: 16px;
+            max-width: 78%;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .ai-message {
+            justify-content: flex-start;
+        }
+
+        .ai-message .message-content {
+            background: #eee7f7;
+            color: #392d49;
+            border-bottom-left-radius: 5px;
+        }
+
+        .user-message {
+            justify-content: flex-end;
+        }
+
+        .user-message .message-content {
+            background: #b79bd9;
+            color: #ffffff;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        /* ==============================
+           INPUT
+        ============================== */
+
+        .input-area {
+            padding: 18px;
+            background: #ffffff;
+            border-top: 1px solid #e7dff0;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        #question {
+            border: 2px solid #d3c0e8;
+            border-radius: 13px !important;
+            padding: 13px 15px;
+            box-shadow: none;
+        }
+
+        #question:focus {
+            border-color: #aa8bcf;
+            box-shadow: 0 0 0 3px rgba(170, 139, 207, 0.15);
+        }
+
+        #askButton {
+            background: #b59ad8;
+            border: none;
+            color: #38294d;
+            font-weight: 600;
+            border-radius: 13px !important;
+            padding: 0 22px;
+        }
+
+        #askButton:hover {
+            background: #a98acF;
+        }
+
+        #askButton:disabled {
+            opacity: 0.6;
+        }
+
+        /* ==============================
+           LOADING
+        ============================== */
+
+        #loading {
+            color: #79638f;
+            font-size: 14px;
+            margin-top: 8px;
+            display: none;
+        }
+
+        /* ==============================
+           HISTORY PANEL
+        ============================== */
+
+        .history-panel {
+            position: fixed;
+            top: 0;
+            right: -380px;
+            width: 360px;
+            height: 100vh;
+            background: white;
+            z-index: 9999;
+            box-shadow: -10px 0 30px rgba(50, 35, 70, 0.18);
+            transition: right 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .history-panel.open {
+            right: 0;
+        }
+
+        .history-header {
+            background: #cbb8e8;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-header h3 {
+            margin: 0;
+            color: #38294d;
+            font-size: 21px;
+        }
+
+        .close-history {
+            border: none;
+            background: transparent;
+            font-size: 25px;
+            color: #4c3a5d;
+            cursor: pointer;
+        }
+
+        .history-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+        }
+
+        .history-item {
+            background: #f3edf9;
+            border: 1px solid #e2d6ef;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .history-item:hover {
+            background: #e9ddf4;
+        }
+
+        .history-question {
+            font-weight: 600;
+            color: #463355;
+            margin-bottom: 5px;
+        }
+
+        .history-answer {
+            color: #74627f;
+            font-size: 13px;
+            max-height: 50px;
+            overflow: hidden;
+        }
+
+        .delete-history {
+            margin-top: 8px;
+            border: none;
+            background: transparent;
+            color: #9b718f;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .delete-history:hover {
+            color: #7d416b;
+        }
+
+        .empty-history {
+            text-align: center;
+            color: #8b7999;
+            margin-top: 50px;
+        }
+
+        /* ==============================
+           OVERLAY
+        ============================== */
+
+        .history-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(40, 25, 55, 0.25);
+            z-index: 9998;
+            display: none;
+        }
+
+        .history-overlay.show {
+            display: block;
+        }
+
+        /* ==============================
+           BACK BUTTON
+        ============================== */
+
+        .back-area {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-btn {
+            background: #d5c3e9;
+            color: #49345c;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 10px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-btn:hover {
+            background: #c7b0df;
+            color: #392847;
+        }
+
+        /* ==============================
+           MOBILE
+        ============================== */
+
+        @media (max-width: 600px) {
+
+            .main-container {
+                margin: 10px auto;
+            }
+
+            .chat-header h1 {
+                font-size: 25px;
+            }
+
+            .chat-box {
+                height: 500px;
+                padding: 15px;
+            }
+
+            .message-content {
+                max-width: 90%;
+            }
+
+            .history-panel {
+                width: 85%;
+                right: -85%;
+            }
+
+            .input-group {
+                flex-direction: column;
+            }
+
+            #askButton {
+                padding: 12px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="main-container">
+
+    <div class="chat-card">
+
+        <!-- ==============================
+             HEADER
+        ============================== -->
+
+        <div class="chat-header">
+
+            <h1>🤖 Sleep Alarm Pro AI</h1>
+
+            <p>
+                Your intelligent AI study assistant
+            </p>
+
+        </div>
+
+
+        <!-- ==============================
+             TOP BUTTONS
+        ============================== -->
+
+        <div class="top-buttons">
+
+            <button
+                class="history-btn"
+                onclick="openHistory()">
+
+                🕘 Chat History
+
+            </button>
+
+            <button
+                class="clear-btn"
+                onclick="clearCurrentChat()">
+
+                🗑 Clear Chat
+
+            </button>
+
+        </div>
+
+
+        <!-- ==============================
+             CHAT BOX
+        ============================== -->
+
+        <div
+            id="chatBox"
+            class="chat-box">
+
+            <div class="message ai-message">
+
+                <div class="message-content">
+
+                    <span class="message-label">
+                        🤖 AI Assistant
+                    </span>
+
+                    Hello! 👋
+
+                    <br><br>
+
+                    I'm your Sleep Alarm Pro AI Assistant.
+
+                    <br><br>
+
+                    Ask me anything you want. I can help with
+                    programming, study questions, explanations,
+                    mathematics, technology and many other topics.
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==============================
+             INPUT AREA
+        ============================== -->
+
+        <div class="input-area">
+
+            <div class="input-group">
+
+                <input
+                    type="text"
+                    id="question"
+                    class="form-control"
+                    placeholder="Ask anything..."
+                    autocomplete="off">
+
+                <button
+                    id="askButton"
+                    class="btn"
+                    onclick="askAI()">
+
+                    Send ➤
+
+                </button>
+
+            </div>
+
+            <div id="loading">
+
+                🤔 AI is thinking...
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==============================
+         BACK BUTTON
+    ============================== -->
+
+    <div class="back-area">
+
+        <a
+            href="{{ url_for('dashboard') }}"
+            class="back-btn">
+
+            ⬅ Back to Dashboard
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- ==============================
+     HISTORY OVERLAY
+============================== -->
+
+<div
+    id="historyOverlay"
+    class="history-overlay"
+    onclick="closeHistory()">
+</div>
+
+
+<!-- ==============================
+     HISTORY PANEL
+============================== -->
+
+<div
+    id="historyPanel"
+    class="history-panel">
+
+    <div class="history-header">
+
+        <h3>🕘 Chat History</h3>
+
+        <button
+            class="close-history"
+            onclick="closeHistory()">
+
+            ×
+
+        </button>
+
+    </div>
+
+
+    <div
+        id="historyList"
+        class="history-list">
+
+    </div>
+
+</div>
+
+
+<script>
+
+    /* =====================================================
+       CHAT HISTORY STORAGE
+    ===================================================== */
+
+    let chatHistory =
+        JSON.parse(
+            localStorage.getItem("sleepAlarmChatHistory")
+        ) || [];
+
+
+    /* =====================================================
+       ASK AI
+    ===================================================== */
+
+    async function askAI() {
+
+        const input =
+            document.getElementById("question");
+
+        const question =
+            input.value.trim();
+
+        if (!question) {
+            return;
+        }
+
+
+        /* Add user message */
+
+        addMessage(
+            question,
+            "user"
+        );
+
+
+        input.value = "";
+
+
+        /* Show loading */
+
+        const loading =
+            document.getElementById("loading");
+
+        const button =
+            document.getElementById("askButton");
+
+        loading.style.display = "block";
+
+        button.disabled = true;
+
+
+        try {
+
+            /*
+             IMPORTANT:
+
+             This calls your EXISTING Flask endpoint.
+
+             We are NOT changing your Gemini AI code.
+            */
+
+            const response =
+                await fetch(
+                    "/ask_ai",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            question: question
+                        })
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            const answer =
+                data.answer ||
+                "Sorry, I did not receive an answer.";
+
+
+            /* Add AI answer */
+
+            addMessage(
+                answer,
+                "ai"
+            );
+
+
+            /* Save history */
+
+            saveHistory(
+                question,
+                answer
+            );
+
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "AI ERROR:",
+                error
+            );
+
+
+            addMessage(
+                "Sorry, something went wrong while connecting to the AI.",
+                "ai"
+            );
+
+        }
+
+        finally {
+
+            loading.style.display = "none";
+
+            button.disabled = false;
+
+            input.focus();
+
+        }
+
+    }
+
+
+    /* =====================================================
+       ADD MESSAGE
+    ===================================================== */
+
+    function addMessage(
+        text,
+        type
+    ) {
+
+        const chatBox =
+            document.getElementById("chatBox");
+
+
+        const message =
+            document.createElement("div");
+
+
+        message.className =
+            "message " +
+            (
+                type === "user"
+                ? "user-message"
+                : "ai-message"
+            );
+
+
+        const content =
+            document.createElement("div");
+
+
+        content.className =
+            "message-content";
+
+
+        const label =
+            document.createElement("span");
+
+
+        label.className =
+            "message-label";
+
+
+        label.textContent =
+            type === "user"
+            ? "You"
+            : "🤖 AI Assistant";
+
+
+        content.appendChild(label);
+
+
+        const textNode =
+            document.createElement("div");
+
+
+        /*
+           textContent is used so AI text
+           is displayed safely.
+        */
+
+        textNode.textContent =
+            text;
+
+
+        content.appendChild(
+            textNode
+        );
+
+
+        message.appendChild(
+            content
+        );
+
+
+        chatBox.appendChild(
+            message
+        );
+
+
+        /* Scroll to bottom */
+
+        chatBox.scrollTop =
+            chatBox.scrollHeight;
+
+    }
+
+
+    /* =====================================================
+       SAVE HISTORY
+    ===================================================== */
+
+    function saveHistory(
+        question,
+        answer
+    ) {
+
+        const historyItem = {
+
+            id: Date.now(),
+
+            question: question,
+
+            answer: answer,
+
+            date:
+                new Date().toLocaleString()
+
+        };
+
+
+        chatHistory.unshift(
+            historyItem
+        );
+
+
+        /*
+           Keep latest 50 conversations.
+        */
+
+        if (chatHistory.length > 50) {
+
+            chatHistory =
+                chatHistory.slice(
+                    0,
+                    50
+                );
+
+        }
+
+
+        localStorage.setItem(
+            "sleepAlarmChatHistory",
+            JSON.stringify(chatHistory)
+        );
+
+    }
+
+
+    /* =====================================================
+       OPEN HISTORY
+    ===================================================== */
+
+    function openHistory() {
+
+        document
+            .getElementById("historyPanel")
+            .classList.add("open");
+
+
+        document
+            .getElementById("historyOverlay")
+            .classList.add("show");
+
+
+        displayHistory();
+
+    }
+
+
+    /* =====================================================
+       CLOSE HISTORY
+    ===================================================== */
+
+    function closeHistory() {
+
+        document
+            .getElementById("historyPanel")
+            .classList.remove("open");
+
+
+        document
+            .getElementById("historyOverlay")
+            .classList.remove("show");
+
+    }
+
+
+    /* =====================================================
+       DISPLAY HISTORY
+    ===================================================== */
+
+    function displayHistory() {
+
+        const list =
+            document.getElementById(
+                "historyList"
+            );
+
+
+        list.innerHTML = "";
+
+
+        if (
+            chatHistory.length === 0
+        ) {
+
+            list.innerHTML = `
+
+                <div class="empty-history">
+
+                    🕘 No chat history yet.
+
+                    <br><br>
+
+                    Start asking questions
+                    and your conversations
+                    will appear here.
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        chatHistory.forEach(
+            function(item) {
+
+                const historyDiv =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                historyDiv.className =
+                    "history-item";
+
+
+                historyDiv.onclick =
+                    function() {
+
+                        loadHistory(item);
+
+                    };
+
+
+                const questionDiv =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                questionDiv.className =
+                    "history-question";
+
+
+                questionDiv.textContent =
+                    "❓ " +
+                    item.question;
+
+
+                const answerDiv =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                answerDiv.className =
+                    "history-answer";
+
+
+                answerDiv.textContent =
+                    item.answer;
+
+
+                const deleteButton =
+                    document.createElement(
+                        "button"
+                    );
+
+
+                deleteButton.className =
+                    "delete-history";
+
+
+                deleteButton.textContent =
+                    "🗑 Delete";
+
+
+                deleteButton.onclick =
+                    function(event) {
+
+                        event.stopPropagation();
+
+                        deleteHistory(
+                            item.id
+                        );
+
+                    };
+
+
+                historyDiv.appendChild(
+                    questionDiv
+                );
+
+
+                historyDiv.appendChild(
+                    answerDiv
+                );
+
+
+                historyDiv.appendChild(
+                    deleteButton
+                );
+
+
+                list.appendChild(
+                    historyDiv
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       LOAD HISTORY
+    ===================================================== */
+
+    function loadHistory(item) {
+
+        const chatBox =
+            document.getElementById(
+                "chatBox"
+            );
+
+
+        chatBox.innerHTML = "";
+
+
+        addMessage(
+            item.question,
+            "user"
+        );
+
+
+        addMessage(
+            item.answer,
+            "ai"
+        );
+
+
+        closeHistory();
+
+    }
+
+
+    /* =====================================================
+       DELETE HISTORY
+    ===================================================== */
+
+    function deleteHistory(id) {
+
+        chatHistory =
+            chatHistory.filter(
+                function(item) {
+
+                    return item.id !== id;
+
+                }
+            );
+
+
+        localStorage.setItem(
+            "sleepAlarmChatHistory",
+            JSON.stringify(chatHistory)
+        );
+
+
+        displayHistory();
+
+    }
+
+
+    /* =====================================================
+       CLEAR CURRENT CHAT
+    ===================================================== */
+
+    function clearCurrentChat() {
+
+        const chatBox =
+            document.getElementById(
+                "chatBox"
+            );
+
+
+        chatBox.innerHTML = `
+
+            <div class="message ai-message">
+
+                <div class="message-content">
+
+                    <span class="message-label">
+                        🤖 AI Assistant
+                    </span>
+
+                    Chat cleared! 🧹
+
+                    <br><br>
+
+                    What would you like to ask me?
+
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+
+    /* =====================================================
+       ENTER KEY
+    ===================================================== */
+
+    document
+        .getElementById("question")
+        .addEventListener(
+            "keydown",
+            function(event) {
+
+                if (
+                    event.key === "Enter"
+                ) {
+
+                    event.preventDefault();
+
+                    askAI();
+
+                }
+
+            }
+        );
+
+
+    /* =====================================================
+       INITIALIZE HISTORY
+    ===================================================== */
+
+    displayHistory();
+
+</script>
+
+</body>
+</html>

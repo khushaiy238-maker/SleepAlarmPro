@@ -1,0 +1,295 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="text-center mb-5">
+
+        <h1 class="fw-bold">
+            ⚙️ Sleep Alarm Pro Settings
+        </h1>
+
+        <p class="text-muted">
+            Customize your AI study and drowsiness detection settings.
+        </p>
+
+    </div>
+
+
+    {% if success %}
+
+    <div class="alert alert-success text-center">
+        ✅ {{ success }}
+    </div>
+
+    {% endif %}
+
+
+    {% if error %}
+
+    <div class="alert alert-danger text-center">
+        ❌ {{ error }}
+    </div>
+
+    {% endif %}
+
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="card shadow-lg border-0 rounded-4">
+
+                <div class="card-body p-5">
+
+                    <form
+                        method="POST"
+                        action="{{ url_for('settings') }}"
+                    >
+
+
+                        <!-- ================================= -->
+                        <!-- ALARM SOUND -->
+                        <!-- ================================= -->
+
+                        <div class="setting-box mb-4 p-4 border rounded-4">
+
+                            <div class="d-flex justify-content-between align-items-center">
+
+                                <div>
+
+                                    <h5 class="fw-bold">
+                                        🔊 Alarm Sound
+                                    </h5>
+
+                                    <p class="text-muted mb-0">
+                                        Play an alarm when drowsiness is detected.
+                                    </p>
+
+                                </div>
+
+
+                                <div class="form-check form-switch">
+
+                                    <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        name="alarm_sound"
+                                        id="alarmSound"
+                                        {% if settings.alarm_sound %}
+                                        checked
+                                        {% endif %}
+                                    >
+
+                                    <label
+                                        class="form-check-label"
+                                        for="alarmSound"
+                                    >
+                                        ON
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- ================================= -->
+                        <!-- AI DETECTION -->
+                        <!-- ================================= -->
+
+                        <div class="setting-box mb-4 p-4 border rounded-4">
+
+                            <div class="d-flex justify-content-between align-items-center">
+
+                                <div>
+
+                                    <h5 class="fw-bold">
+                                        🤖 AI Detection
+                                    </h5>
+
+                                    <p class="text-muted mb-0">
+                                        Enable eye and drowsiness detection.
+                                    </p>
+
+                                </div>
+
+
+                                <div class="form-check form-switch">
+
+                                    <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        name="ai_detection"
+                                        id="aiDetection"
+                                        {% if settings.ai_detection %}
+                                        checked
+                                        {% endif %}
+                                    >
+
+                                    <label
+                                        class="form-check-label"
+                                        for="aiDetection"
+                                    >
+                                        ON
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- ================================= -->
+                        <!-- DROWSINESS TIME -->
+                        <!-- ================================= -->
+
+                        <div class="setting-box mb-4 p-4 border rounded-4">
+
+                            <h5 class="fw-bold">
+                                ⏱️ Drowsiness Detection Time
+                            </h5>
+
+                            <p class="text-muted">
+                                How long eyes must remain closed before drowsiness is detected.
+                            </p>
+
+
+                            <select
+                                name="drowsiness_seconds"
+                                class="form-select"
+                            >
+
+                                <option
+                                    value="2"
+                                    {% if settings.drowsiness_seconds == 2 %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    2 seconds
+                                </option>
+
+
+                                <option
+                                    value="3"
+                                    {% if settings.drowsiness_seconds == 3 %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    3 seconds
+                                </option>
+
+
+                                <option
+                                    value="4"
+                                    {% if settings.drowsiness_seconds == 4 %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    4 seconds
+                                </option>
+
+
+                                <option
+                                    value="5"
+                                    {% if settings.drowsiness_seconds == 5 %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    5 seconds
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+
+                        <!-- ================================= -->
+                        <!-- EYE SENSITIVITY -->
+                        <!-- ================================= -->
+
+                        <div class="setting-box mb-4 p-4 border rounded-4">
+
+                            <h5 class="fw-bold">
+                                👁️ Eye Detection Sensitivity
+                            </h5>
+
+                            <p class="text-muted">
+                                Choose how sensitive the eye detection should be.
+                            </p>
+
+
+                            <select
+                                name="eye_sensitivity"
+                                class="form-select"
+                            >
+
+                                <option
+                                    value="low"
+                                    {% if settings.eye_sensitivity == "low" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Low
+                                </option>
+
+
+                                <option
+                                    value="normal"
+                                    {% if settings.eye_sensitivity == "normal" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Normal
+                                </option>
+
+
+                                <option
+                                    value="sensitive"
+                                    {% if settings.eye_sensitivity == "sensitive" %}
+                                    selected
+                                    {% endif %}
+                                >
+                                    Sensitive
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+
+                        <!-- ================================= -->
+                        <!-- SAVE -->
+                        <!-- ================================= -->
+
+                        <div class="text-center mt-5">
+
+                            <button
+                                type="submit"
+                                class="btn btn-success btn-lg px-5"
+                            >
+                                💾 Save Settings
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

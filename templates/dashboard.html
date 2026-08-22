@@ -1,0 +1,756 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- =========================
+     DASHBOARD HEADER
+========================= -->
+
+<div class="dashboard-header mb-4">
+    <h2>
+        👋 Welcome {{ user.fullname }}
+    </h2>
+
+    <p>
+        Track your study, focus, fatigue and AI performance.
+    </p>
+</div>
+
+
+<!-- =========================
+     MAIN STATUS CARDS
+========================= -->
+
+<div class="row g-4">
+
+    <!-- Study Timer -->
+    <div class="col-md-3">
+        <div class="card dashboard-card timer-card text-center p-4">
+            <div class="card-icon">📚</div>
+
+            <h5>Study Timer</h5>
+
+            <h2 id="studyTimer">
+                00:00:00
+            </h2>
+        </div>
+    </div>
+
+
+    <!-- Focus -->
+    <div class="col-md-3">
+        <div class="card dashboard-card focus-card text-center p-4">
+
+            <div class="card-icon">🎯</div>
+
+            <h5>Focus Score</h5>
+
+            <h2>
+                {% if session %}
+                    {{ session.focus_score }}%
+                {% else %}
+                    0%
+                {% endif %}
+            </h2>
+
+        </div>
+    </div>
+
+
+    <!-- Drowsiness -->
+    <div class="col-md-3">
+        <div class="card dashboard-card drowsy-card text-center p-4">
+
+            <div class="card-icon">😴</div>
+
+            <h5>Drowsiness</h5>
+
+            <h2>
+                {% if session %}
+                    {{ session.drowsiness_count }}
+                {% else %}
+                    0
+                {% endif %}
+            </h2>
+
+        </div>
+    </div>
+
+
+    <!-- AI Status -->
+    <div class="col-md-3">
+        <div class="card dashboard-card ai-status-card text-center p-4">
+
+            <div class="card-icon">🤖</div>
+
+            <h5>AI Status</h5>
+
+            <h2>{{ ai_status }}</h2>
+
+            <hr>
+
+            <h6>📷 Camera</h6>
+
+            <span class="badge bg-success">
+                {{ camera_status }}
+            </span>
+
+        </div>
+    </div>
+
+</div>
+
+
+
+<!-- =========================
+     STATISTICS
+========================= -->
+
+<div class="row mt-5 g-4">
+
+    <div class="col-md-3">
+
+        <div class="card statistic-card text-center p-3">
+
+            <span>📚</span>
+
+            <h6>Total Sessions</h6>
+
+            <h3>
+                {{ total_sessions }}
+            </h3>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-3">
+
+        <div class="card statistic-card text-center p-3">
+
+            <span>⏱️</span>
+
+            <h6>Total Study Time</h6>
+
+            <h3>
+                {{ total_minutes }} Min
+            </h3>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-3">
+
+        <div class="card statistic-card text-center p-3">
+
+            <span>🎯</span>
+
+            <h6>Average Focus</h6>
+
+            <h3>
+                {{ average_focus }}%
+            </h3>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-3">
+
+        <div class="card statistic-card text-center p-3">
+
+            <span>🏆</span>
+
+            <h6>Best Focus</h6>
+
+            <h3>
+                {{ best_focus }}%
+            </h3>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================
+     TODAY'S PROGRESS
+========================= -->
+
+<div class="card progress-card mt-5">
+
+    <div class="card-body">
+
+        <h3>
+            📈 Today's Progress
+        </h3>
+
+        <p class="text-muted">
+            Your latest focus performance
+        </p>
+
+        <hr>
+
+        <div
+            class="progress"
+            style="height: 30px;"
+        >
+
+            <div
+                class="progress-bar progress-custom progress-bar-striped progress-bar-animated"
+                style="width:{% if session %}{{ session.focus_score }}{% else %}0{% endif %}%"
+            >
+
+                {% if session %}
+                    {{ session.focus_score }}%
+                {% else %}
+                    0%
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================
+     AI STUDY ASSISTANT
+========================= -->
+
+<div class="ai-assistant-dashboard mt-5">
+
+    <div class="ai-dashboard-icon">
+        🤖
+    </div>
+
+    <div class="ai-dashboard-content">
+
+        <h2>
+            AI Study Assistant
+        </h2>
+
+        <p>
+            Ask questions, understand difficult concepts,
+            solve problems, learn programming and get
+            instant AI-powered assistance.
+        </p>
+
+        <div class="ai-features">
+
+            <span>💡 Ask Questions</span>
+
+            <span>💻 Programming Help</span>
+
+            <span>📚 Study Help</span>
+
+            <span>🧠 Concept Explanation</span>
+
+        </div>
+
+        <a
+            href="{{ url_for('ai_assistant') }}"
+            class="btn ai-open-btn"
+        >
+            🤖 Open AI Assistant →
+        </a>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================
+     DASHBOARD BUTTONS
+========================= -->
+
+<div class="text-center mt-5">
+
+    <!-- Start AI -->
+    <a
+        href="{{ url_for('start_ai') }}"
+        class="btn dashboard-btn start-btn m-2"
+    >
+        ▶ Start AI
+    </a>
+
+
+    <!-- Analytics -->
+    <a
+        href="{{ url_for('analytics') }}"
+        class="btn dashboard-btn analytics-btn m-2"
+    >
+        📊 Analytics
+    </a>
+
+
+    <!-- Brain Refresh -->
+    <a
+        href="{{ url_for('games') }}"
+        class="btn dashboard-btn games-btn m-2"
+    >
+        🎮 Brain Refresh
+    </a>
+
+
+    <!-- Profile -->
+    <a
+        href="{{ url_for('profile') }}"
+        class="btn dashboard-btn profile-btn m-2"
+    >
+        👤 Profile
+    </a>
+
+
+    <!-- Settings -->
+    <a
+        href="{{ url_for('settings') }}"
+        class="btn dashboard-btn settings-btn m-2"
+    >
+        ⚙ Settings
+    </a>
+
+</div>
+
+
+
+<!-- =========================
+     DASHBOARD CSS
+========================= -->
+
+<style>
+
+    /* Header */
+
+    .dashboard-header h2 {
+        color: #604a91;
+        font-weight: 700;
+    }
+
+    .dashboard-header p {
+        color: #75678f;
+        margin-bottom: 0;
+    }
+
+
+    /* Main cards */
+
+    .dashboard-card {
+
+        border: none;
+
+        border-radius: 20px;
+
+        min-height: 190px;
+
+        display: flex;
+
+        justify-content: center;
+
+        align-items: center;
+
+        transition: 0.3s;
+
+    }
+
+
+    .dashboard-card:hover {
+
+        transform: translateY(-5px);
+
+    }
+
+
+    .card-icon {
+
+        font-size: 38px;
+
+        margin-bottom: 8px;
+
+    }
+
+
+    .timer-card {
+
+        background: linear-gradient(
+            135deg,
+            #eee6ff,
+            #f7f2ff
+        );
+
+        color: #604a91;
+
+    }
+
+
+    .focus-card {
+
+        background: linear-gradient(
+            135deg,
+            #e8f7ef,
+            #f3fff8
+        );
+
+        color: #357a52;
+
+    }
+
+
+    .drowsy-card {
+
+        background: linear-gradient(
+            135deg,
+            #fff4d8,
+            #fffaf0
+        );
+
+        color: #8a681d;
+
+    }
+
+
+    .ai-status-card {
+
+        background: linear-gradient(
+            135deg,
+            #eee6ff,
+            #f8f4ff
+        );
+
+        color: #604a91;
+
+    }
+
+
+    /* Statistics */
+
+    .statistic-card {
+
+        border: none;
+
+        border-radius: 18px;
+
+        background: #ffffff;
+
+        box-shadow:
+            0 5px 20px rgba(80, 60, 120, 0.08);
+
+        transition: 0.3s;
+
+    }
+
+
+    .statistic-card:hover {
+
+        transform: translateY(-4px);
+
+    }
+
+
+    .statistic-card span {
+
+        font-size: 25px;
+
+        margin-bottom: 5px;
+
+    }
+
+
+    .statistic-card h6 {
+
+        color: #75678f;
+
+    }
+
+
+    .statistic-card h3 {
+
+        color: #604a91;
+
+        font-weight: 700;
+
+    }
+
+
+    /* Progress */
+
+    .progress-card {
+
+        border: none;
+
+        border-radius: 20px;
+
+        box-shadow:
+            0 5px 20px rgba(80, 60, 120, 0.08);
+
+    }
+
+
+    .progress-card h3 {
+
+        color: #604a91;
+
+    }
+
+
+    .progress-custom {
+
+        background: linear-gradient(
+            90deg,
+            #8b6bc1,
+            #b69be6
+        );
+
+    }
+
+
+    /* =========================
+       AI ASSISTANT CARD
+    ========================= */
+
+    .ai-assistant-dashboard {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 30px;
+
+        padding: 35px;
+
+        border-radius: 25px;
+
+        background: linear-gradient(
+            135deg,
+            #eee6ff,
+            #f8f4ff
+        );
+
+        border: 1px solid #ded2f5;
+
+        box-shadow:
+            0 8px 25px rgba(
+                100,
+                70,
+                150,
+                0.10
+            );
+
+        transition: 0.3s;
+
+    }
+
+
+    .ai-assistant-dashboard:hover {
+
+        transform: translateY(-4px);
+
+        box-shadow:
+            0 12px 30px rgba(
+                100,
+                70,
+                150,
+                0.15
+            );
+
+    }
+
+
+    .ai-dashboard-icon {
+
+        font-size: 75px;
+
+        min-width: 100px;
+
+        text-align: center;
+
+    }
+
+
+    .ai-dashboard-content h2 {
+
+        color: #604a91;
+
+        font-weight: 700;
+
+        margin-bottom: 10px;
+
+    }
+
+
+    .ai-dashboard-content p {
+
+        color: #75678f;
+
+        font-size: 16px;
+
+        max-width: 800px;
+
+    }
+
+
+    .ai-features {
+
+        display: flex;
+
+        flex-wrap: wrap;
+
+        gap: 10px;
+
+        margin: 15px 0;
+
+    }
+
+
+    .ai-features span {
+
+        background: white;
+
+        color: #604a91;
+
+        padding: 8px 13px;
+
+        border-radius: 20px;
+
+        font-size: 13px;
+
+        border: 1px solid #ded2f5;
+
+    }
+
+
+    .ai-open-btn {
+
+        background: #8b6bc1;
+
+        color: white;
+
+        border: none;
+
+        padding: 11px 22px;
+
+        border-radius: 12px;
+
+        font-weight: 600;
+
+        transition: 0.2s;
+
+    }
+
+
+    .ai-open-btn:hover {
+
+        background: #7354a8;
+
+        color: white;
+
+        transform: translateY(-2px);
+
+    }
+
+
+    /* =========================
+       DASHBOARD BUTTONS
+    ========================= */
+
+    .dashboard-btn {
+
+        border: none;
+
+        border-radius: 12px;
+
+        padding: 11px 20px;
+
+        font-weight: 600;
+
+        transition: 0.2s;
+
+    }
+
+
+    .dashboard-btn:hover {
+
+        transform: translateY(-2px);
+
+    }
+
+
+    .start-btn {
+
+        background: #78b88d;
+
+        color: white;
+
+    }
+
+
+    .analytics-btn {
+
+        background: #8b6bc1;
+
+        color: white;
+
+    }
+
+
+    .games-btn {
+
+        background: #d6a84f;
+
+        color: white;
+
+    }
+
+
+    .profile-btn {
+
+        background: #72a9c7;
+
+        color: white;
+
+    }
+
+
+    .settings-btn {
+
+        background: #8d8497;
+
+        color: white;
+
+    }
+
+
+    /* Mobile */
+
+    @media (max-width: 768px) {
+
+        .ai-assistant-dashboard {
+
+            flex-direction: column;
+
+            text-align: center;
+
+        }
+
+
+        .ai-features {
+
+            justify-content: center;
+
+        }
+
+    }
+
+</style>
+
+{% endblock %}

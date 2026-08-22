@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Brain Refresh Games</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: white;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1150px;
+            margin: auto;
+            padding: 40px 0;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 42px;
+            color: #38bdf8;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #cbd5e1;
+            font-size: 17px;
+            margin-bottom: 45px;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .game-card {
+            background: #1e293b;
+            border-radius: 18px;
+            padding: 35px 25px;
+            text-align: center;
+            min-height: 270px;
+
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.08);
+
+            transition: 0.3s;
+        }
+
+        .game-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.35);
+        }
+
+        .game-icon {
+            font-size: 55px;
+            margin-bottom: 15px;
+        }
+
+        .game-card h2 {
+            margin: 10px 0;
+            font-size: 25px;
+        }
+
+        .game-card p {
+            color: #cbd5e1;
+            min-height: 48px;
+            line-height: 1.5;
+        }
+
+        .btn {
+            display: block;
+            text-decoration: none;
+            color: white;
+            padding: 12px;
+            border-radius: 25px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .blue {
+            background: #2563eb;
+        }
+
+        .green {
+            background: #16a34a;
+        }
+
+        .yellow {
+            background: #eab308;
+            color: black;
+        }
+
+        .cyan {
+            background: #06b6d4;
+        }
+
+        .purple {
+            background: #9333ea;
+        }
+
+        .back-btn {
+            display: block;
+            width: 210px;
+            text-align: center;
+            margin: 45px auto 0;
+
+            padding: 12px;
+
+            border: 1px solid white;
+            border-radius: 8px;
+
+            text-decoration: none;
+            color: white;
+        }
+
+        .back-btn:hover {
+            background: white;
+            color: #0f172a;
+        }
+
+        @media(max-width: 900px) {
+
+            .games-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media(max-width: 600px) {
+
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .title {
+                font-size: 32px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1 class="title">
+        🤖 Brain Refresh Center
+    </h1>
+
+    <p class="subtitle">
+        Refresh your brain before continuing your study session.
+    </p>
+
+
+    <div class="games-grid">
+
+
+        <!-- MEMORY MATCH -->
+
+        <div class="game-card">
+
+            <div class="game-icon">
+                🧠
+            </div>
+
+            <h2>
+                Memory Match
+            </h2>
+
+            <p>
+                Improve concentration and memory
+                by matching the correct cards.
+            </p>
+
+            <a href="{{ url_for('memory_game') }}"
+               class="btn blue">
+
+                Play Now
+
+            </a>
+
+        </div>
+
+
+        <!-- IT QUIZ -->
+
+        <div class="game-card">
+
+            <div class="game-icon">
+                💻
+            </div>
+
+            <h2>
+                IT Quiz Challenge
+            </h2>
+
+            <p>
+                Test your knowledge of Python,
+                HTML, SQL, AI and Networking.
+            </p>
+
+            <a href="{{ url_for('it_quiz') }}"
+               class="btn green">
+
+                Start Quiz
+
+            </a>
+
+        </div>
+
+
+        <!-- SUDOKU -->
+
+        <div class="game-card">
+
+            <div class="game-icon">
+                🔢
+            </div>
+
+            <h2>
+                Sudoku
+            </h2>
+
+            <p>
+                Train your logical thinking
+                and problem-solving skills.
+            </p>
+
+            <a href="{{ url_for('sudoku') }}"
+               class="btn yellow">
+
+                Play
+
+            </a>
+
+        </div>
+
+
+        <!-- WORD SCRAMBLE -->
+
+        <div class="game-card">
+
+            <div class="game-icon">
+                🔤
+            </div>
+
+            <h2>
+                IT Word Scramble
+            </h2>
+
+            <p>
+                Unscramble technical words
+                and improve your IT vocabulary.
+            </p>
+
+            <a href="{{ url_for('word_scramble') }}"
+               class="btn cyan">
+
+                Play
+
+            </a>
+
+        </div>
+
+
+        <!-- COLOR REFLEX -->
+
+        <div class="game-card">
+
+            <div class="game-icon">
+                🎨
+            </div>
+
+            <h2>
+                Color Reflex
+            </h2>
+
+            <p>
+                Improve concentration by
+                identifying the correct color.
+            </p>
+
+            <a href="{{ url_for('color_reflex') }}"
+               class="btn purple">
+
+                Play
+
+            </a>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- BACK TO DASHBOARD -->
+
+    <a href="{{ url_for('dashboard') }}"
+       class="back-btn">
+
+        ← Back to Dashboard
+
+    </a>
+
+</div>
+
+</body>
+
+</html>
