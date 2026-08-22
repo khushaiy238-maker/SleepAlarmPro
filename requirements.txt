@@ -4,3 +4,5 @@ flask_sqlalchemy
 python-dotenv 
 google-genai 
 google-genai 
+pymysql 
+pymysql 
