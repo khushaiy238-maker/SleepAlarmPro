@@ -5,7 +5,7 @@ python-dotenv
 google-genai 
 pymysql 
 opencv-python
-mediapipe==0.10.9
+mediapipe==0.10.35
 simpleaudio
 
 
