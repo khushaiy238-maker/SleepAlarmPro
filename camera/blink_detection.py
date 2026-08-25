@@ -197,25 +197,26 @@ if not AI_DETECTION_ENABLED:
 
 try:
 
-    db = pymysql.connect(
-        host="localhost",
-        user="root",
-        password="ROOT@123",
-        database="sleep_alarm_pro"
+   # db = pymysql.connect(
+     #   host="localhost",
+      #  user="root",
+      #  password="ROOT@123",
+      #  database="sleep_alarm_pro"
     )
 
-    cursor = db.cursor()
+   # cursor = db.cursor()
 
     print("=" * 60)
-    print("MYSQL DATABASE CONNECTED")
+   print("MYSQL DISABLED FOR RENDER SERVER")
     print("=" * 60)
 
-except Exception as e:
+#except Exception as e:
 
-    print("=" * 60)
-    print("MYSQL CONNECTION ERROR")
-    print(e)
-    print("=" * 60)
+    #print("=" * 60)
+   # print("MYSQL CONNECTION ERROR")
+   # print(e)
+   # print("=" * 60)
+
 
     db = None
     cursor = None
