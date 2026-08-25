@@ -7,7 +7,8 @@ import pymysql
 import os
 import json
 from datetime import datetime
-from playsound import playsound
+import simpleaudio as sa
+
 
 
 # ==========================================================
@@ -297,36 +298,21 @@ def distance(a, b):
 # ==========================================================
 
 def play_alarm():
-
     try:
-
         alarm_path = os.path.join(
-            os.path.dirname(
-                os.path.dirname(__file__)
-            ),
+            os.path.dirname(os.path.dirname(__file__)),
             "sounds",
-            "alarm.mp3"
+            "alarm.wav"  # better to use .wav file
         )
-
         if os.path.exists(alarm_path):
-
-            playsound(alarm_path)
-
+            wave_obj = sa.WaveObject.from_wave_file(alarm_path)
+            play_obj = wave_obj.play()
+            play_obj.wait_done()
         else:
-
-            print(
-                "Alarm file not found:"
-            )
-
-            print(
-                alarm_path
-            )
-
+            print("Alarm file not found:", alarm_path)
     except Exception as e:
+        print("Alarm Error:", e)
 
-        print(
-            "Alarm Error:",
-            e
         )
 
 
