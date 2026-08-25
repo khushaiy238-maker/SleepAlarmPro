@@ -43,10 +43,7 @@ app.config["SECRET_KEY"] = "sleepalarm123"
 # DATABASE
 # ==========================================================
 
-app.config["SQLALCHEMY_DATABASE_URI"] = (
-    "mysql+pymysql://root:ROOT%40123@localhost:3306/sleep_alarm_pro"
-)
-
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///sleepalarm.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
