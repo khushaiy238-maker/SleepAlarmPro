@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Sleep Alarm Pro</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f8f5ff;
+            color: #30234d;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.92);
+            box-shadow: 0 2px 15px rgba(80, 50, 120, 0.08);
+            padding: 15px 0;
+        }
+
+        .navbar-brand {
+            color: #63478f !important;
+            font-size: 23px;
+            font-weight: 700;
+        }
+
+        .nav-link {
+            color: #55476b !important;
+            font-weight: 500;
+            margin-left: 15px;
+        }
+
+        .nav-link:hover {
+            color: #8b68bd !important;
+        }
+
+
+        /* ================= HERO ================= */
+
+        .hero {
+            min-height: 600px;
+
+            display: flex;
+            align-items: center;
+
+            background:
+                radial-gradient(
+                    circle at 80% 20%,
+                    #e8d8ff 0%,
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at 10% 80%,
+                    #eadfff 0%,
+                    transparent 30%
+                ),
+                #f8f5ff;
+
+            padding: 70px 20px;
+        }
+
+        .hero-content {
+            max-width: 1150px;
+            margin: auto;
+        }
+
+        .hero-text {
+            padding: 20px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+
+            background: #eee4ff;
+            color: #7553a5;
+
+            padding: 8px 16px;
+            border-radius: 30px;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: 58px;
+            line-height: 1.1;
+
+            font-weight: 800;
+
+            color: #302044;
+
+            margin-bottom: 20px;
+        }
+
+        .hero h1 span {
+            color: #9871c9;
+        }
+
+        .hero-description {
+            font-size: 19px;
+            line-height: 1.7;
+
+            color: #6b5c7d;
+
+            max-width: 620px;
+
+            margin-bottom: 30px;
+        }
+
+
+        /* ================= BUTTONS ================= */
+
+        .btn-start {
+            display: inline-block;
+
+            background: linear-gradient(
+                135deg,
+                #a989d4,
+                #8f6abc
+            );
+
+            color: white;
+
+            padding: 14px 28px;
+
+            border-radius: 12px;
+
+            text-decoration: none;
+
+            font-weight: 600;
+
+            margin-right: 10px;
+
+            box-shadow:
+                0 8px 20px rgba(130, 90, 180, 0.25);
+
+            transition: 0.3s;
+        }
+
+        .btn-start:hover {
+            color: white;
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 12px 25px rgba(130, 90, 180, 0.35);
+        }
+
+
+        .btn-learn {
+            display: inline-block;
+
+            background: white;
+
+            color: #7553a5;
+
+            padding: 12px 27px;
+
+            border: 2px solid #b89bdd;
+
+            border-radius: 12px;
+
+            text-decoration: none;
+
+            font-weight: 600;
+
+            transition: 0.3s;
+        }
+
+        .btn-learn:hover {
+            background: #b89bdd;
+            color: white;
+
+            transform: translateY(-3px);
+        }
+
+
+        /* ================= HERO VISUAL ================= */
+
+        .hero-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 30px;
+        }
+
+        .ai-card {
+            width: 350px;
+            min-height: 390px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,0.95),
+                    rgba(239,230,255,0.95)
+                );
+
+            border-radius: 30px;
+
+            padding: 35px;
+
+            box-shadow:
+                0 25px 60px rgba(91, 65, 130, 0.18);
+
+            text-align: center;
+
+            border: 1px solid #e4d8f4;
+        }
+
+        .ai-icon {
+            width: 100px;
+            height: 100px;
+
+            margin: 10px auto 25px;
+
+            border-radius: 50%;
+
+            background: #e5d5fa;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 52px;
+
+            box-shadow:
+                0 10px 25px rgba(120, 80, 170, 0.15);
+        }
+
+        .ai-card h3 {
+            color: #45315e;
+            font-weight: 700;
+        }
+
+        .ai-card p {
+            color: #75678a;
+            line-height: 1.6;
+        }
+
+        .status {
+            display: inline-block;
+
+            background: #e8f7ed;
+            color: #37804d;
+
+            padding: 7px 15px;
+
+            border-radius: 20px;
+
+            font-size: 13px;
+
+            margin-top: 10px;
+        }
+
+
+        /* ================= FEATURES ================= */
+
+        .features {
+            padding: 80px 20px;
+
+            background: white;
+        }
+
+        .section-title {
+            text-align: center;
+
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-size: 38px;
+            font-weight: 750;
+
+            color: #34234c;
+        }
+
+        .section-title p {
+            color: #756985;
+
+            font-size: 17px;
+        }
+
+        .feature-card {
+            background: #fbf9ff;
+
+            border: 1px solid #eee5fa;
+
+            border-radius: 20px;
+
+            padding: 30px;
+
+            height: 100%;
+
+            transition: 0.3s;
+
+            box-shadow:
+                0 8px 25px rgba(90, 60, 120, 0.06);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-7px);
+
+            box-shadow:
+                0 15px 35px rgba(90, 60, 120, 0.12);
+        }
+
+        .feature-icon {
+            width: 65px;
+            height: 65px;
+
+            border-radius: 16px;
+
+            background: #eee4ff;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 32px;
+
+            margin-bottom: 20px;
+        }
+
+        .feature-card h4 {
+            color: #46335d;
+
+            font-weight: 700;
+
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            color: #756985;
+
+            line-height: 1.6;
+
+            margin: 0;
+        }
+
+
+        /* ================= ABOUT ================= */
+
+        .about {
+            padding: 80px 20px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #eee5ff,
+                    #f8f4ff
+                );
+
+            text-align: center;
+        }
+
+        .about h2 {
+            font-size: 36px;
+
+            color: #38264f;
+
+            font-weight: 750;
+
+            margin-bottom: 20px;
+        }
+
+        .about p {
+            max-width: 800px;
+
+            margin: auto;
+
+            color: #6d607c;
+
+            line-height: 1.8;
+
+            font-size: 17px;
+        }
+
+
+        /* ================= FOOTER ================= */
+
+        .sleep-footer {
+            background:
+                linear-gradient(
+                    135deg,
+                    #eee6ff,
+                    #f7f2ff
+                );
+
+            color: #4b3f72;
+
+            padding: 35px 20px 25px;
+
+            text-align: center;
+
+            border-top: 1px solid #ded2f5;
+        }
+
+        .footer-content {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .footer-logo {
+            font-size: 22px;
+
+            color: #604a91;
+
+            font-weight: 700;
+
+            margin-bottom: 8px;
+        }
+
+        .sleep-footer p {
+            margin: 5px 0 18px;
+
+            color: #75678f;
+
+            font-size: 14px;
+        }
+
+        .footer-links {
+            display: flex;
+
+            justify-content: center;
+
+            gap: 25px;
+
+            flex-wrap: wrap;
+
+            margin-bottom: 20px;
+        }
+
+        .footer-links a {
+            color: #6b4ca0;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+            transition: 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: #8b6bc1;
+
+            text-decoration: underline;
+        }
+
+        .footer-line {
+            width: 80%;
+
+            max-width: 700px;
+
+            height: 1px;
+
+            background: #ddd1f2;
+
+            margin: 15px auto;
+        }
+
+        .sleep-footer small {
+            color: #887a9f;
+
+            font-size: 13px;
+        }
+
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 768px) {
+
+            .hero {
+                text-align: center;
+            }
+
+            .hero h1 {
+                font-size: 40px;
+            }
+
+            .hero-description {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-visual {
+                margin-top: 30px;
+            }
+
+            .ai-card {
+                width: 300px;
+            }
+
+            .btn-start,
+            .btn-learn {
+                margin: 5px;
+            }
+
+        }
+        /* Extra rules for small phones */
+@media (max-width: 600px) {
+    .hero h1 {
+        font-size: 28px;   /* smaller heading */
+    }
+    .hero-description {
+        font-size: 15px;   /* smaller paragraph */
+        max-width: 100%;   /* full width on phone */
+    }
+    .ai-card {
+        width: 100%;       /* card fits phone screen */
+        padding: 20px;
+    }
+    .feature-card {
+        margin-bottom: 20px; /* stack features vertically */
+    }
+    .btn-start,
+    .btn-learn {
+        width: 100%;       /* buttons stretch across screen */
+        margin-top: 10px;
+    }
+}
+<!-- Camera Preview Section -->
+<div class="camera-section">
+    <video id="cameraPreview" width="250" height="180" autoplay playsinline></video>
+</div>
+
+<script>
+navigator.mediaDevices.getUserMedia({ video: true })
+.then(stream => {
+    document.getElementById('cameraPreview').srcObject = stream;
+})
+.catch(err => {
+    console.error("Camera not accessible: ", err);
+});
+</script>
+
+
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="{{ url_for('home') }}">
+            🤖 Sleep Alarm Pro
+        </a>
+
+        <!-- ✅ Toggler button with Bootstrap icon -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarMenu">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('features') }}">Features</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('register') }}">Register</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<<!-- ================= HERO ================= -->
+
+<section class="hero">
+
+    <div class="container hero-content">
+
+        <div class="row align-items-center">
+
+            <!-- Text Section -->
+            <div class="col-lg-7 col-12 hero-text">
+
+                <div class="hero-badge">
+                    ✨ AI-Powered Student Productivity
+                </div>
+
+                <h1>
+                    Study Smarter.
+                    <span>Stay Focused.</span>
+                </h1>
+
+                <p class="hero-description">
+                    Sleep Alarm Pro uses AI-powered technology
+                    to monitor focus, detect drowsiness,
+                    assist your studies and refresh your mind
+                    with interactive activities.
+                </p>
+
+                <div>
+                    <a href="{{ url_for('login') }}" class="btn-start">
+                        Get Started 🚀
+                    </a>
+                    <a href="{{ url_for('features') }}" class="btn-learn">
+                        Explore Features →
+                    </a>
+                </div>
+            </div>
+
+            <!-- AI Visual Section -->
+            <div class="col-lg-5 col-12 hero-visual">
+
+                <div class="ai-card">
+                    <div class="ai-icon">🤖</div>
+                    <h3>Your Smart Study Companion</h3>
+                    <p>
+                        Focus monitoring, AI assistance,
+                        fatigue detection and brain-refresh
+                        activities — all in one place.
+                    </p>
+                    <span class="status">● AI System Ready</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ================= FEATURES ================= -->
+
+<section class="features">
+
+    <div class="container">
+
+
+        <div class="section-title">
+
+            <h2>
+
+                Everything You Need to Study Better
+
+            </h2>
+
+            <p>
+
+                Powerful features designed for students
+
+            </p>
+
+        </div>
+
+
+        <div class="row g-4">
+
+
+            <div class="col-md-4">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        👁️
+                    </div>
+
+                    <h4>
+                        Face Detection
+                    </h4>
+
+                    <p>
+                        Monitor face visibility during
+                        study sessions using the camera.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        😴
+                    </div>
+
+                    <h4>
+                        Drowsiness Detection
+                    </h4>
+
+                    <p>
+                        Detect signs of fatigue and
+                        drowsiness during studying.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-12 col-md-6">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        🤖
+                    </div>
+
+                    <h4>
+                        AI Study Assistant
+                    </h4>
+
+                    <p>
+                        Ask questions and receive
+                        AI-powered explanations and help.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-12 col-md-6">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        📊
+                    </div>
+
+                    <h4>
+                        Study Analytics
+                    </h4>
+
+                    <p>
+                        Track study time, focus scores
+                        and drowsiness statistics.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        🧠
+                    </div>
+
+                    <h4>
+                        Brain Refresh
+                    </h4>
+
+                    <p>
+                        Refresh your mind with interactive
+                        games and mental activities.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        ⏰
+                    </div>
+
+                    <h4>
+                        Smart Alerts
+                    </h4>
+
+                    <p>
+                        Receive intelligent alerts when
+                        your focus or alertness decreases.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= ABOUT ================= -->
+
+<section class="about">
+
+    <div class="container">
+
+        <h2>
+
+            Built for Smarter Studying 💜
+
+        </h2>
+
+
+        <p>
+
+            Sleep Alarm Pro combines artificial intelligence,
+            camera-based monitoring, study analytics and
+            brain-refresh activities to create a smarter
+            study environment for students.
+
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer class="sleep-footer">
+
+    <div class="footer-content">
+
+        <div class="footer-logo">
+
+            🤖 Sleep Alarm Pro
+
+        </div>
+
+
+        <p>
+
+            AI-Based Student Focus, Fatigue Detection
+            & Brain Refresh System
+
+        </p>
+
+
+        <div class="footer-links">
+
+            <a href="{{ url_for('home') }}">
+                Home
+            </a>
+
+            <a href="{{ url_for('dashboard') }}">
+                Dashboard
+            </a>
+
+            <a href="{{ url_for('ai_assistant') }}">
+                AI Assistant
+            </a>
+
+            <a href="{{ url_for('games') }}">
+                Brain Refresh
+            </a>
+
+        </div>
+
+
+        <div class="footer-line"></div>
+
+
+        <small>
+
+            © 2026 Sleep Alarm Pro • TY B.Sc IT Major Project
+
+        </small>
+
+    </div>
+
+</footer>
+
+
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+
+</body>
+
+</html>

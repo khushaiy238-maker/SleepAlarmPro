@@ -1,0 +1,6 @@
+{
+    "alarm_sound": true,
+    "ai_detection": true,
+    "drowsiness_seconds": 3,
+    "eye_sensitivity": "normal"
+}

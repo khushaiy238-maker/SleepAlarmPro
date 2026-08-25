@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <h2 class="mb-4">📖 Study Session</h2>
+
+    <div class="card shadow p-4">
+
+        <form method="POST" action="{{ url_for('start_study_session') }}">
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Subject
+                </label>
+
+                <input
+                    type="text"
+                    name="subject"
+                    class="form-control"
+                    placeholder="Enter Subject Name"
+                    required
+                >
+
+            </div>
+
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Study Goal
+                </label>
+
+                <input
+                    type="text"
+                    name="goal"
+                    class="form-control"
+                    placeholder="Example: Complete Unit 3"
+                    required
+                >
+
+            </div>
+
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Study Duration
+                </label>
+
+                <select
+                    name="duration"
+                    class="form-select"
+                    required
+                >
+
+                    <option value="30">30 Minutes</option>
+                    <option value="45">45 Minutes</option>
+                    <option value="60">60 Minutes</option>
+                    <option value="90">90 Minutes</option>
+                    <option value="120">120 Minutes</option>
+
+                </select>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="btn btn-success"
+            >
+                ▶ Start Study Session
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
