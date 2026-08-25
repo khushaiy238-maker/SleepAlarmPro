@@ -202,7 +202,6 @@ try:
       #  user="root",
       #  password="ROOT@123",
       #  database="sleep_alarm_pro"
-    )
 
    # cursor = db.cursor()
 
