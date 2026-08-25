@@ -6,6 +6,6 @@ google-genai
 pymysql 
 opencv-python
 mediapipe
-playsound
+simpleaudio
 
 
