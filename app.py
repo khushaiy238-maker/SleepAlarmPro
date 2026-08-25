@@ -5,6 +5,7 @@ from google import genai
 import os
 import sys
 import subprocess
+
 load_dotenv()
 
 # ==========================================================
@@ -12,15 +13,6 @@ load_dotenv()
 # ==========================================================
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-
-app = Flask(__name__)
-
-@app.route('/')
-def home():
-    return render_template('index.html')
-
-
-# ==========================================================
 
 if not GEMINI_API_KEY:
     print("=" * 60)
@@ -37,7 +29,7 @@ else:
 
 app = Flask(__name__)
 
-# ==========================================================
+## ==========================================================
 # SECRET KEY
 # ==========================================================
 
@@ -47,14 +39,13 @@ app.config["SECRET_KEY"] = "sleepalarm123"
 # DATABASE
 # ==========================================================
 
-DATABASE_URL = os.getenv("DATABASE_URL")
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///sleepalarm.db")
 
-if DATABASE_URL:
-    DATABASE_URL = DATABASE_URL.replace(
-        "postgres://",
-        "postgresql://",
-        1
-    )
+DATABASE_URL = DATABASE_URL.replace(
+    "postgres://",
+    "postgresql://",
+    1
+)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
