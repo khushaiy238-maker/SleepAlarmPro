@@ -362,4 +362,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
 </script>
 
+<script>
+    const video = document.getElementById("camera");
+    const cameraStatus = document.getElementById("cameraStatus");
+
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+            video.srcObject = stream;
+            cameraStatus.className = "alert alert-success mt-3";
+            cameraStatus.innerHTML = "📷 Camera is live!";
+        })
+        .catch(error => {
+            console.error("Camera error:", error);
+            cameraStatus.className = "alert alert-danger mt-3";
+            cameraStatus.innerHTML = "❌ Camera access failed: " + error.message;
+        });
+</script>
+
 {% endblock %}
