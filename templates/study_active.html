@@ -367,11 +367,29 @@ document.addEventListener("DOMContentLoaded", function () {
     const cameraStatus = document.getElementById("cameraStatus");
 
     navigator.mediaDevices.getUserMedia({ video: true })
-        .then(stream => {
-            video.srcObject = stream;
-            cameraStatus.className = "alert alert-success mt-3";
-            cameraStatus.innerHTML = "📷 Camera is live!";
-        })
+    .then(stream => {
+        video.srcObject = stream;
+        cameraStatus.className = "alert alert-success mt-3";
+        cameraStatus.innerHTML = "📷 Camera is live!";
+
+        // Keyboard listener inside success block
+        document.addEventListener("keydown", function(event) {
+            if (["Escape", "Enter"].includes(event.key)) {
+                if (video.srcObject) {
+                    video.srcObject.getTracks().forEach(track => track.stop());
+                    video.srcObject = null;
+                    cameraStatus.className = "alert alert-secondary mt-3";
+                    cameraStatus.innerHTML = `📷 Camera stopped (${event.key} pressed).`;
+                }
+            }
+        });
+    })
+    .catch(error => {
+        console.error("Camera error:", error);
+        cameraStatus.className = "alert alert-danger mt-3";
+        cameraStatus.innerHTML = "❌ Camera access failed: " + error.message;
+    });
+
         .catch(error => {
             console.error("Camera error:", error);
             cameraStatus.className = "alert alert-danger mt-3";
