@@ -384,17 +384,49 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     })
-    .catch(error => {
-        console.error("Camera error:", error);
-        cameraStatus.className = "alert alert-danger mt-3";
-        cameraStatus.innerHTML = "❌ Camera access failed: " + error.message;
-    });
+    <script>
+    const video = document.getElementById("camera");
+    const cameraStatus = document.getElementById("cameraStatus");
 
-        .catch(error => {
-            console.error("Camera error:", error);
-            cameraStatus.className = "alert alert-danger mt-3";
-            cameraStatus.innerHTML = "❌ Camera access failed: " + error.message;
+    navigator.mediaDevices.getUserMedia({ video: true })
+    .then(stream => {
+
+        video.srcObject = stream;
+
+        cameraStatus.className = "alert alert-success mt-3";
+        cameraStatus.innerHTML = "📷 Camera is live!";
+
+        document.addEventListener("keydown", function(event) {
+
+            if (["Escape", "Enter"].includes(event.key)) {
+
+                if (video.srcObject) {
+
+                    video.srcObject
+                        .getTracks()
+                        .forEach(track => track.stop());
+
+                    video.srcObject = null;
+
+                    cameraStatus.className =
+                        "alert alert-secondary mt-3";
+
+                    cameraStatus.innerHTML =
+                        `📷 Camera stopped (${event.key} pressed).`;
+                }
+            }
         });
+    })
+    .catch(error => {
+
+        console.error("Camera error:", error);
+
+        cameraStatus.className =
+            "alert alert-danger mt-3";
+
+        cameraStatus.innerHTML =
+            "❌ Camera access failed: " + error.message;
+    });
 </script>
 
 {% endblock %}
