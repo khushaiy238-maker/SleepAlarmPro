@@ -31,11 +31,23 @@
 
                     <!-- CAMERA STATUS -->
 
-                    <div class="alert alert-success mt-4">
-                        📷 <strong>AI Camera Detection Starting...</strong>
-                        <br>
-                        Your camera should open automatically.
-                    </div>
+                    <!-- CAMERA -->
+<div class="mt-4">
+
+    <video
+        id="camera"
+        width="100%"
+        autoplay
+        playsinline
+        muted
+        style="max-width:600px; border-radius:20px;"
+    ></video>
+
+    <div id="cameraStatus" class="alert alert-warning mt-3">
+        📷 Camera is starting...
+    </div>
+
+</div>
 
                     <!-- TIMER -->
 
