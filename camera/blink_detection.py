@@ -195,8 +195,6 @@ if not AI_DETECTION_ENABLED:
 # MYSQL DATABASE
 # ==========================================================
 
-try:
-
 # db = pymysql.connect(
 #   host="localhost",
 #  user="root",
